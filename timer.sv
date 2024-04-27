@@ -16,12 +16,12 @@ module timer #( parameter count_g 	= 26'd249_999_999,	// 5s
 	always_comb begin : proc_counto
 		if (~rst_n) begin
 			count_to = 1;
-		end else (start) begin
+		end else if (start) begin
 			count_to = count_to + 1;
 		end
 	end
 
-	always_ff @(start | Timeout) begin : proc_assign_count_value
+	always @(start | Timeout) begin : proc_assign_count_value
 		if(count_to) begin
 			 count <= count_g;
 		end else begin
@@ -37,14 +37,11 @@ module timer #( parameter count_g 	= 26'd249_999_999,	// 5s
 	 		if (count != 0) begin
 	 			count <= count - 1;
 	 		end else begin
-	 			case (count_to)
-	 				1'b0 : timeout <= 1;
-	 				1'b1 : Timeout <= 1;
-	 				default : begin
-	 					timeout <= 0;
-	 					Timeout <= 0;
-	 				end
-	 			endcase
+	 			if (count_to) begin
+	 				Timeout = 1;
+	 			end else begin
+	 				timeout = 1;
+	 			end
 	 		end
 
 	 	end
