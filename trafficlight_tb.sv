@@ -21,7 +21,7 @@ module trafficlight_tb ();
 
 	initial //direct input generation
 	begin
-		t_rst = 1;
+		t_rst_n = 1;
 		#10 t_rst_n = 0;
 
 		#10 t_rst_n = 1;
@@ -31,7 +31,7 @@ module trafficlight_tb ();
 		#5 stim_car = 0; correct_light = 6'b001100;
 		#2_499_999_974 stim_car = 0; correct_light = 6'b001100;
 		#5 stim_car = 0; correct_light = 6'b001100;
-		
+		#5 stim_car = 1;
 
 	end
 
