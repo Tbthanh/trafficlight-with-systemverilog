@@ -22,13 +22,11 @@ module trafficlight (
 							.start_n(start_n),
 							.enable_h(enable_h),
 							.light(light[5:3]));
-	
+
 	reg start;
 	assign start = start_h | start_n;
 
 	timer timer(.clk(clk), .rst_n(rst_n), 
-				.enable_h(enable_h), 
-				.enable_n(enable_n), 
 				.start(start), 
 				.Timeout(Timeout), 
 				.timeout(timeout));
