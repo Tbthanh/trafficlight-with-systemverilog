@@ -7,9 +7,9 @@ module highway_fsm (
 	input Timeout,
 	input timeout,
 
-	output start_h,
-	output enable_n,
-	output [2:0] light,		// g y r
+	output reg start_h,
+	output reg enable_n,
+	output [2:0] light		// g y r
 );
 	// synopsys enum state_info
 	parameter [2:0] green_h = 3'b100,
@@ -69,10 +69,9 @@ module countryroad_fsm (
 	input Timeout,
 	input timeout,
 
-	output start_n,
-	output enable_h,
-	output [2:0] light,		// g y r
-	
+	output logic start_n,
+	output logic enable_h,
+	output [2:0] light		// g y r
 );
 	// synopsys enum state_info
 	parameter [2:0] green_h = 3'b100,

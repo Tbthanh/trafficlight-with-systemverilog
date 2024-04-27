@@ -7,8 +7,8 @@ module timer #( parameter count_g 	= 26'd249_999_999,	// 5s
 	input enable_h,
 	input start,		// 0 is green, 1 is yellow
 
-	output Timeout,
-	output timeout
+	output reg Timeout,
+	output reg timeout
 );
 	reg [26:0] count;
 	reg count_to;	// to decicde which count_x
@@ -21,7 +21,7 @@ module timer #( parameter count_g 	= 26'd249_999_999,	// 5s
 		end
 	end
 
-	always_ff @(start) begin : proc_assign_count_value
+	always_ff @(start | Timeout) begin : proc_assign_count_value
 		if(count_to) begin
 			 count <= count_g;
 		end else begin
@@ -35,19 +35,19 @@ module timer #( parameter count_g 	= 26'd249_999_999,	// 5s
 	 		timeout <= 0;
 	 	end else begin
 	 		if (count != 0) begin
-	 			count = count - 1;
+	 			count <= count - 1;
 	 		end else begin
 	 			case (count_to)
 	 				1'b0 : timeout <= 1;
 	 				1'b1 : Timeout <= 1;
 	 				default : begin
-	 					timeout = 0;
-	 					Timeout = 0;
+	 					timeout <= 0;
+	 					Timeout <= 0;
 	 				end
 	 			endcase
 	 		end
 
 	 	end
-	 end
+	end
 
 endmodule : timer
