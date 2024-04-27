@@ -1,36 +1,29 @@
-module timer #( parameter count_g 	= , 
-				parameter count_y	= )
-	(
-	input clk,    	// Clock
+module timer #( parameter count_g 	= 26'd249_999_999,	// 5s 
+				parameter count_y	= 26'd49_999_999)	// 1s
+(	input clk,    	// Clock
+	input rst_n,  	// Asynchronous reset active low
+
 	input enable_n, 
 	input enable_h,
-	input rst_n,  	// Asynchronous reset active low
 	input start,		// 0 is green, 1 is yellow
 
-
 	output Timeout,
-	// output timeout
+	output timeout
 );
-	reg [:] count;
+	reg [26:0] count;
 
-	load = (start && (enable_h || enable_n));
+	// reg load;
+	// assign load = (start & (enable_h | enable_n));
 
-	always_ff @(posedge clk or negedge rst_n) begin : proc_counter
+
+	always @(posedge clk or negedge rst_n) begin
 	 	if(~rst_n) begin
-	 		 count <= count_green;
-	 		 Timeout <= 0;
-	 		 // timeout <= 0;
+	 		count <= count_g;
+	 		Timeout <= 0;
+	 		timeout <= 0;
 	 	end else begin
-	 		 if (load)
-	 		 begin
-	 		 	count <= count_to;	// how count_to
-	 		 end
-	 		 else if (~Timeout)
-	 		 begin
-	 		 	count <= count - 1;
-	 		 	Timeout <= ( (count - 1) == 0 );
-	 		 end
+	 		 
 	 	end
-	 end @() 
+	 end
 
 endmodule : timer
