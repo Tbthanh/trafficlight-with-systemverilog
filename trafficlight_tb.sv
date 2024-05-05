@@ -29,7 +29,7 @@ module trafficlight_tb ();
 		correct_light = 6'b0;
 
 		#5 stim_car = 0; correct_light = 6'b001100;
-		#2_499_999_974 stim_car = 0; correct_light = 6'b001100;
+		#100 stim_car = 0; correct_light = 6'b001100;
 		#5 stim_car = 0; correct_light = 6'b001100;
 		#5 stim_car = 1;
 
