@@ -7,8 +7,9 @@ module highway_fsm (
 	input Timeout,
 	input timeout,
 
-	output reg start_h,
-	output reg enable_n,
+	output logic start_g,
+	output logic start_y,
+	output logic enable_n,
 	output [2:0] light		// g y r
 );
 	// synopsys enum state_info
@@ -24,13 +25,14 @@ module highway_fsm (
 	always_comb 	// = always @(*) but smarter
 	begin : proc_fsm
 		NextState = CurrentState;
-		start_h = 0; 	// default value to avoid latch
+		start_y = 0; 	// default value to avoid latch
+		start_g = 0;
 		enable_n = 0;
 		case (CurrentState)
 			green_h: begin
 				if (Timeout & car)  begin
 					NextState = yellow_h; 
-					start_h = 1;
+					start_y = 1;
 				end
 			end 
 			yellow_h: begin
@@ -42,7 +44,7 @@ module highway_fsm (
 			red_h: begin
 				if (enable_h) begin
 					NextState = green_h; 
-					start_h = 1;
+					start_g = 1;
 				end
 			end 
 		endcase
@@ -69,7 +71,8 @@ module countryroad_fsm (
 	input Timeout,
 	input timeout,
 
-	output logic start_n,
+	output logic start_y,
+	output logic start_g,
 	output logic enable_h,
 	output [2:0] light		// g y r
 );
@@ -86,13 +89,14 @@ module countryroad_fsm (
 	always_comb 	// = always @(*) but smarter
 	begin : proc_fsm
 		NextState = CurrentState;
-		start_n = 0; 	// default value to avoid latch
+		start_y = 0; 	// default value to avoid latch
+		start_g = 0;
 		enable_h = 0;
 		case (CurrentState)
 			green_h: begin
 				if (Timeout)  begin
 					NextState = yellow_h; 
-					start_n = 1;
+					start_y = 1;
 				end
 			end 
 			yellow_h: begin
@@ -104,7 +108,7 @@ module countryroad_fsm (
 			red_h: begin
 				if (enable_n) begin
 					NextState = green_h; 
-					start_n = 1;
+					start_g = 1;
 				end
 			end 
 		endcase

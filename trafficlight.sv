@@ -5,13 +5,17 @@ module trafficlight (
 
 	output [5:0]light // {countryroad(g,y,r), highway(g,y,r)}
 );
-	wire enable_h, enable_n, timeout, Timeout, start_n, start_h;
+	logic enable_h, enable_n, timeout, Timeout, start_g_n, start_g_h, start_y_n, start_y_h;
+	logic _start_g, _start_y;
+	assign _start_g = start_g_n | start_g_h;
+	assign _start_y = start_y_n | start_y_h;
 
 	highway_fsm		h_fsm (	.clk(clk), .car(car), .rst_n(rst_n), 
 							.enable_h(enable_h), 
 							.Timeout(Timeout), 
 							.timeout(timeout), 
-							.start_h(start_h), 
+							.start_y(start_y_h),
+							.start_g (start_g_h), 
 							.enable_n(enable_n), 
 							.light(light[2:0]));
 
@@ -19,15 +23,15 @@ module trafficlight (
 							.enable_n(enable_n),
 							.Timeout(Timeout),
 							.timeout(timeout),
-							.start_n(start_n),
+							.start_y(start_y_n),
+							.start_g (start_g_n),
 							.enable_h(enable_h),
 							.light(light[5:3]));
 
-	reg start;
-	assign start = start_h | start_n;
 
 	timer timer(.clk(clk), .rst_n(rst_n), 
-				.start(start), 
+				.start_g(_start_g),
+				.start_y(_start_y), 
 				.Timeout(Timeout), 
 				.timeout(timeout));
 	
